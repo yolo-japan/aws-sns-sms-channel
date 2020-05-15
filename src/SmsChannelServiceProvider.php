@@ -26,6 +26,7 @@ class SmsChannelServiceProvider extends ServiceProvider
                             $this->app['config']['services.sns.secret']
                         ),
                         'region' => $this->app['config']['services.sns.region'],
+                        'endpoint' => $this->app['config']['services.sns.endpoint'],
                     ])
                 );
             });
