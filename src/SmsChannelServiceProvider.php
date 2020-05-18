@@ -18,13 +18,19 @@ class SmsChannelServiceProvider extends ServiceProvider
     {
         Notification::resolved(function (ChannelManager $service) {
             $service->extend('sms', function ($app) {
+                $credentials = null;
+
+                $accessKey = $this->app['config']['services.sns.key'];
+                $secret = $this->app['config']['services.sns.secret'];
+
+                if (null !== $accessKey && null !== $secret) {
+                    $credentials = new Credentials($accessKey, $secret);
+                }
+
                 return new SmsChannel(
                     new SnsClient([
                         'version' => '2010-03-31',
-                        'credentials' => new Credentials(
-                            $this->app['config']['services.sns.key'],
-                            $this->app['config']['services.sns.secret']
-                        ),
+                        'credentials' => $credentials,
                         'region' => $this->app['config']['services.sns.region'],
                         'endpoint' => $this->app['config']['services.sns.endpoint'],
                     ])
